@@ -1,4 +1,4 @@
-package org.json;
+package org.json.test;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,7 +6,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.io.StringWriter;
-import junit.framework.TestCase;
+
+import org.json.CDL;
+import org.json.Cookie;
+import org.json.CookieList;
+import org.json.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONML;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+import org.json.JSONTokener;
+import org.json.XML;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /*
 Copyright (c) 2002 JSON.org
@@ -42,19 +56,9 @@ SOFTWARE.
  * @author JSON.org
  * @version 2011-05-22
  */
-public class Test extends TestCase {
-    public Test(String name) {
-        super(name);
-    }
+public class JSONTest {
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
+	@Test
     public void testXML() throws Exception {
         JSONObject jsonobject;
         String string;
@@ -69,6 +73,7 @@ public class Test extends TestCase {
         assertEquals("<test><blank/><empty/></test>", XML.toString(jsonobject));
     }
 
+	@Test
     public void testNull() throws Exception {
         JSONObject jsonobject;
 
@@ -80,6 +85,7 @@ public class Test extends TestCase {
         assertTrue(jsonobject.isNull("message"));
     }
 
+	@Test
     public void testJSON() throws Exception {
     	double       eps = 2.220446049250313e-16;
         Iterator<String> iterator;
@@ -703,6 +709,7 @@ public class Test extends TestCase {
                 ja.toString());
     }
 
+	@Test
     public void testExceptions() throws Exception {
         JSONArray jsonarray = null;
         JSONObject jsonobject;
@@ -856,54 +863,6 @@ public class Test extends TestCase {
             fail("expecting JSONException here.");
         } catch (JSONException jsone) {
             assertEquals("Duplicate key \"bosanda\"", jsone.getMessage());
-        }
-    }
-
-    /**
-     * Beany is a typical class that implements JSONString. It also
-     * provides some beany methods that can be used to
-     * construct a JSONObject. It also demonstrates constructing
-     * a JSONObject with an array of names.
-     */
-    class Beany implements JSONString {
-        public String aString;
-        public double aNumber;
-        public boolean aBoolean;
-
-        public Beany(String string, double d, boolean b) {
-            this.aString = string;
-            this.aNumber = d;
-            this.aBoolean = b;
-        }
-
-        public double getNumber() {
-            return this.aNumber;
-        }
-
-        public String getString() {
-            return this.aString;
-        }
-
-        public boolean isBoolean() {
-            return this.aBoolean;
-        }
-
-        public String getBENT() {
-            return "All uppercase key";
-        }
-
-        public String getX() {
-            return "x";
-        }
-
-        public String toJSONString() {
-            return "{" + JSONObject.quote(this.aString) + ":" +
-                    JSONObject.doubleToString(this.aNumber) + "}";
-        }
-
-        public String toString() {
-            return this.getString() + " " + this.getNumber() + " " +
-                    this.isBoolean() + "." + this.getBENT() + " " + this.getX();
         }
     }
 }
