@@ -240,7 +240,7 @@ public class JSONObject {
     public JSONObject(Map<String, Object> map) {
         this.map = new HashMap<String, Object>();
         if (map != null) {
-            for( Map.Entry<String, Object> e : this.map.entrySet() ) {
+            for( Map.Entry<String, Object> e : map.entrySet() ) {
                 Object value = e.getValue();
                 if (value != null) {
                     this.map.put(e.getKey(), wrap(value));
@@ -1415,7 +1415,7 @@ public class JSONObject {
         }
         if (value instanceof Map) {
             @SuppressWarnings("unchecked")
-              Map<String, Object> mapValue = (Map<String, Object>)value;
+              final Map<String, Object> mapValue = (Map<String, Object>)value;
             return new JSONObject(mapValue).toString();
         }
         if (value instanceof Collection) {
@@ -1462,7 +1462,7 @@ public class JSONObject {
              }
              if (object instanceof Map) {
                 @SuppressWarnings("unchecked")
-                Map<String, Object> mapObject = (Map<String, Object>)object;
+                  final Map<String, Object> mapObject = (Map<String, Object>)object;
                 return new JSONObject(mapObject);
              }
              Package objectPackage = object.getClass().getPackage();
@@ -1507,7 +1507,7 @@ public class JSONObject {
             ((JSONArray) value).write(writer, indentFactor, indent);
         } else if (value instanceof Map) {
         	@SuppressWarnings("unchecked")
-        	final Map<String, Object> mapValue = (Map<String, Object>) value;
+        	  final Map<String, Object> mapValue = (Map<String, Object>) value;
             new JSONObject(mapValue).write(writer, indentFactor, indent);
         } else if (value instanceof Collection) {
             new JSONArray((Collection<?>) value).write(writer, indentFactor,
