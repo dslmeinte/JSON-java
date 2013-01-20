@@ -25,6 +25,7 @@ SOFTWARE.
 */
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
@@ -92,9 +93,14 @@ import java.util.ResourceBundle;
  * @author JSON.org
  * @version 2012-07-02
  */
-public class JSONObject {
+public class JSONObject implements Serializable {
 
     /**
+	 * Generated on January 20th, 2013.
+	 */
+	private static final long serialVersionUID = -1037062063993413255L;
+
+	/**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,
      * whilst Java's null is equivalent to the value that JavaScript calls
      * undefined.

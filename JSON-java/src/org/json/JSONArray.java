@@ -25,6 +25,7 @@ SOFTWARE.
 */
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Array;
@@ -78,10 +79,14 @@ import java.util.Map;
  * @author JSON.org
  * @version 2012-04-20
  */
-public class JSONArray {
-
+public class JSONArray implements Serializable {
 
     /**
+	 * Generated on January 20th, 2013.
+	 */
+	private static final long serialVersionUID = -8169447126156834886L;
+
+	/**
      * The arrayList where the JSONArray's properties are kept.
      */
     private final ArrayList<Object> myArrayList;
