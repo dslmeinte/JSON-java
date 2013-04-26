@@ -144,7 +144,7 @@ public class JSONObject extends JSONType implements Serializable {
     private void store(String key, Object object) {
     	this.map.put(key, object);
     	if( object instanceof JSONType ) {
-    		((JSONType) object).setParent(this);
+    		((JSONType) object).setContainer(this);
     	}
     }
 
@@ -1246,7 +1246,7 @@ public class JSONObject extends JSONType implements Serializable {
     public Object remove(String key) {
     	final Object object = this.map.get(key);
     	if( object != null && object instanceof JSONType ) {
-    		((JSONType) object).setParent(null);
+    		((JSONType) object).setContainer(null);
     	}
         return this.map.remove(key);
     }

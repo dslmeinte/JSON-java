@@ -93,7 +93,7 @@ public class JSONArray extends JSONType implements Serializable {
 
     private void setParent(Object object, JSONArray parent) {
     	if( object != null && object instanceof JSONType ) {
-    		((JSONType) object).setParent(parent);
+    		((JSONType) object).setContainer(parent);
     	}
     }
 
