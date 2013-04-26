@@ -8,7 +8,7 @@ package org.json;
  */
 abstract class JSONType {
 
-	protected JSONType container = null;
+	private JSONType container = null;
 
 	/**
 	 * @return The container in the JSON containment tree or {@code null} if this is the root.
@@ -22,7 +22,7 @@ abstract class JSONType {
 	 * @param container - the container object, <em>which then assumes responsibility over the containment link</em>.
 	 * @return This JSON object, for chaining.
 	 */
-	public <T extends JSONType> T setContainer(T container) {
+	protected <T extends JSONType> T setContainer(T container) {
 		this.container = container;
 		return container;	// for chaining (with correct generic type)
 	}
