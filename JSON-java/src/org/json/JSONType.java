@@ -6,7 +6,7 @@ package org.json;
  * 
  * @author Meinte Boersma
  */
-abstract class JSONType {
+abstract public class JSONType {
 
 	private JSONType container = null;
 
