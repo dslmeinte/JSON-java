@@ -93,7 +93,7 @@ import java.util.ResourceBundle;
  * @author JSON.org
  * @version 2012-07-02
  */
-public class JSONObject implements Serializable {
+public class JSONObject extends JSONType implements Serializable {
 
     /**
 	 * Generated on January 20th, 2013.
@@ -141,6 +141,12 @@ public class JSONObject implements Serializable {
      */
     private final Map<String, Object> map;
 
+    private void store(String key, Object object) {
+    	this.map.put(key, object);
+    	if( object instanceof JSONType ) {
+    		((JSONType) object).setParent(this);
+    	}
+    }
 
     /**
      * It is sometimes more convenient and less ambiguous to have a
@@ -249,7 +255,7 @@ public class JSONObject implements Serializable {
             for( Map.Entry<String, Object> e : map.entrySet() ) {
                 Object value = e.getValue();
                 if (value != null) {
-                    this.map.put(e.getKey(), wrap(value));
+                    this.store(e.getKey(), wrap(value));
                 }
             }
         }
@@ -997,7 +1003,7 @@ public class JSONObject implements Serializable {
 
                         Object result = method.invoke(bean, (Object[])null);
                         if (result != null) {
-                            this.map.put(key, wrap(result));
+                            this.store(key, wrap(result));
                         }
                     }
                 }
@@ -1108,7 +1114,7 @@ public class JSONObject implements Serializable {
         }
         if (value != null) {
             testValidity(value);
-            this.map.put(key, value);
+            this.store(key, value);
         } else {
             this.remove(key);
         }
@@ -1238,6 +1244,10 @@ public class JSONObject implements Serializable {
      * or null if there was no value.
      */
     public Object remove(String key) {
+    	final Object object = this.map.get(key);
+    	if( object != null && object instanceof JSONType ) {
+    		((JSONType) object).setParent(null);
+    	}
         return this.map.remove(key);
     }
 
@@ -1296,18 +1306,18 @@ public class JSONObject implements Serializable {
 
     /**
      * Throw an exception if the object is a NaN or infinite number.
-     * @param o The object to test.
-     * @throws JSONException If o is a non-finite number.
+     * @param object The object to test.
+     * @throws JSONException If object is a non-finite number.
      */
-    public static void testValidity(Object o) throws JSONException {
-        if (o != null) {
-            if (o instanceof Double) {
-                if (((Double)o).isInfinite() || ((Double)o).isNaN()) {
+    public static void testValidity(Object object) throws JSONException {
+        if (object != null) {
+            if (object instanceof Double) {
+                if (((Double) object).isInfinite() || ((Double) object).isNaN()) {
                     throw new JSONException(
                         "JSON does not allow non-finite numbers.");
                 }
-            } else if (o instanceof Float) {
-                if (((Float)o).isInfinite() || ((Float)o).isNaN()) {
+            } else if (object instanceof Float) {
+                if (((Float) object).isInfinite() || ((Float) object).isNaN()) {
                     throw new JSONException(
                         "JSON does not allow non-finite numbers.");
                 }

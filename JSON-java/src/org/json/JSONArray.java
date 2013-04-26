@@ -79,7 +79,7 @@ import java.util.Map;
  * @author JSON.org
  * @version 2012-04-20
  */
-public class JSONArray implements Serializable {
+public class JSONArray extends JSONType implements Serializable {
 
     /**
 	 * Generated on January 20th, 2013.
@@ -90,6 +90,22 @@ public class JSONArray implements Serializable {
      * The arrayList where the JSONArray's properties are kept.
      */
     private final ArrayList<Object> myArrayList;
+
+    private void setParent(Object object, JSONArray parent) {
+    	if( object != null && object instanceof JSONType ) {
+    		((JSONType) object).setParent(parent);
+    	}
+    }
+
+    private void store(Object object) {
+    	setParent(object, this);
+    	this.myArrayList.add(object);
+    }
+
+    private void store(int index, Object object) {
+    	setParent(object, this);
+    	this.myArrayList.set(index, object);
+    }
 
 
     /**
@@ -114,10 +130,10 @@ public class JSONArray implements Serializable {
             for (;;) {
                 if (x.nextClean() == ',') {
                     x.back();
-                    this.myArrayList.add(JSONObject.NULL);
+                    this.store(JSONObject.NULL);
                 } else {
                     x.back();
-                    this.myArrayList.add(x.nextValue());
+                    this.store(x.nextValue());
                 }
                 switch (x.nextClean()) {
                 case ';':
@@ -157,7 +173,7 @@ public class JSONArray implements Serializable {
         this.myArrayList = new ArrayList<Object>();
         if (collection != null) {
             for( Object object : collection ) {
-                this.myArrayList.add(JSONObject.wrap(object));
+                this.store(JSONObject.wrap(object));
 			}
         }
     }
@@ -644,7 +660,7 @@ public class JSONArray implements Serializable {
      * @return this.
      */
     public JSONArray put(Object value) {
-        this.myArrayList.add(value);
+        this.store(value);
         return this;
     }
 
@@ -758,7 +774,7 @@ public class JSONArray implements Serializable {
             throw new JSONException("JSONArray[" + index + "] not found.");
         }
         if (index < this.length()) {
-            this.myArrayList.set(index, value);
+            this.store(index, value);
         } else {
             while (index != this.length()) {
                 this.put(JSONObject.NULL);
@@ -776,9 +792,10 @@ public class JSONArray implements Serializable {
      * or null if there was no value.
      */
     public Object remove(int index) {
-        Object o = this.opt(index);
+        final Object object = this.opt(index);
+       	setParent(object, null);
         this.myArrayList.remove(index);
-        return o;
+        return object;
     }
 
 
@@ -795,11 +812,11 @@ public class JSONArray implements Serializable {
         if (names == null || names.length() == 0 || this.length() == 0) {
             return null;
         }
-        JSONObject jo = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         for (int i = 0; i < names.length(); i += 1) {
-            jo.put(names.getString(i), this.opt(i));
+            jsonObject.put(names.getString(i), this.opt(i));
         }
-        return jo;
+        return jsonObject;
     }
 
 
